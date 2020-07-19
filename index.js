@@ -7,8 +7,15 @@ const state = {
         {
             title: 'oranges',
             check: false
+        },
+        {
+            title: 'milk',
+            check: true
+        },
+        {
+            title: 'bread',
+            check: false
         }
-
     ],
 
 }
