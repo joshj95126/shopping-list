@@ -24,7 +24,7 @@ function render() {
     console.log('Hello World!');
     const items = state.bookmarks.map(item => `
 <li>
-        <span class="shopping-item">${item.title}</span>
+        <span class="shopping-item ${item.check?'shopping-item__checked':''}">${item.title}</span>
         <div class="shopping-item-controls">
           <button class="shopping-item-toggle">
             <span class="button-label">check</span>
@@ -49,7 +49,26 @@ function eventListener() {
         })
         render()
     })
+    $('body').on('click', '.shopping-item-delete', e => {
+        const title = $(e.currentTarget).parent().siblings('.shopping-item').text()
+        const bookmarks = state.bookmarks.filter(bookmark => bookmark.title != title)
+        state.bookmarks = bookmarks
+        render()
+        console.log(title);
+    })
+    $('body').on('click', '.shopping-item-toggle', e => {
+        const title = $(e.currentTarget).parent().siblings('.shopping-item').text()
+        const bookmarks = state.bookmarks.map(bookmark => {
+            if (bookmark.title == title) {
+                bookmark.check = !bookmark.check
+            }
+            return bookmark;
+        })
+        state.bookmarks = bookmarks
+        render()
+    })
 }
+
 
 function main() {
     eventListener()
