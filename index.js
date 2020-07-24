@@ -1,30 +1,7 @@
-const state = {
-    bookmarks: [{
-            title: 'apples',
-            check: false
-
-        },
-        {
-            title: 'oranges',
-            check: false
-        },
-        {
-            title: 'milk',
-            check: true
-        },
-        {
-            title: 'bread',
-            check: false
-        }
-    ],
-
-}
-
-function render() {
-    console.log('Hello World!');
-    const items = state.bookmarks.map(item => `
+function render(title, check) {
+    const items = `
 <li>
-        <span class="shopping-item ${item.check?'shopping-item__checked':''}">${item.title}</span>
+        <span class="shopping-item ${check?'shopping-item__checked':''}">${title}</span>
         <div class="shopping-item-controls">
           <button class="shopping-item-toggle">
             <span class="button-label">check</span>
@@ -34,44 +11,29 @@ function render() {
           </button>
         </div>
       </li>
-`)
-    $('.shopping-list').html(items)
+`
+    $('.shopping-list').append(items)
 }
 
 function eventListener() {
-    $('form').submit(e => {
-        console.log('Hello World!');
+    $('body').on('submit', 'form', function(e) {
         e.preventDefault()
-        const titleValue = e.target.title.value
-        state.bookmarks.push({
-            title: titleValue,
-            check: false
-        })
-        render()
+        const titleValue = this['shopping-list-entry'].value
+        render(titleValue, false)
     })
     $('body').on('click', '.shopping-item-delete', e => {
-        const title = $(e.currentTarget).parent().siblings('.shopping-item').text()
-        const bookmarks = state.bookmarks.filter(bookmark => bookmark.title != title)
-        state.bookmarks = bookmarks
-        render()
-        console.log(title);
+        const title = $(e.currentTarget).parent().parent().remove()
     })
     $('body').on('click', '.shopping-item-toggle', e => {
-        const title = $(e.currentTarget).parent().siblings('.shopping-item').text()
-        const bookmarks = state.bookmarks.map(bookmark => {
-            if (bookmark.title == title) {
-                bookmark.check = !bookmark.check
-            }
-            return bookmark;
-        })
-        state.bookmarks = bookmarks
-        render()
+        const title = $(e.currentTarget).parent().siblings('.shopping-item').toggleClass('shopping-item__checked')
+
+
     })
 }
 
 
 function main() {
     eventListener()
-    render()
+
 }
 $(main)
